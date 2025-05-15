@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Slimcore\\": "src/"
+            "SlimCore\\": "src/"
         }
     }
 }
