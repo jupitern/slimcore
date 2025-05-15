@@ -1,0 +1,21 @@
+{
+    "name": "jupitern/slimcore",
+    "homepage": "https://github.com/jupitern/slimcore",
+    "license": "MIT",
+    "support": {
+        "source": "https://github.com/jupitern/slimcore",
+        "issues": "https://github.com/jupitern/slimcore/issues"
+    },
+    "require": {
+        "php": ">=8.3",
+        "slim/psr7": "1.7.*",
+        "slim/slim": "4.14.*",
+        "monolog/monolog": "2.* || 3.*",
+        "vlucas/phpdotenv": "5.6.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Slimcore\\": "src/"
+        }
+    }
+}
