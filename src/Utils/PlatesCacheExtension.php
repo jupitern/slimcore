@@ -17,6 +17,11 @@ class PlatesCacheExtension implements ExtensionInterface {
 
     public function startCache(string $cacheKey, ?int $cacheKeyTtl = null): bool
     {
+        if (app()->isEnvironment('development')) {
+            ob_start();
+            return true;
+        }
+
         $this->cacheKey = $cacheKey;
         $this->cacheKeyTtl = $cacheKeyTtl;
         $this->redis = app()->has('redis') ? app()->resolve('redis') : null;

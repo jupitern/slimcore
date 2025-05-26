@@ -141,7 +141,8 @@ class App
     {
         $logger = $this->has('logger') ? $this->resolve('logger') : null;
 
-        $errorMiddleware = $this->addErrorMiddleware($this->configs['debug'] ?? false, $logErrors = true, $logErrorDetails = false, $logger);
+        $debug = $this->configs['debug'] ?? false;
+        $errorMiddleware = $this->addErrorMiddleware($debug, true, $debug, $logger);
 
         $errorMiddleware->setErrorHandler(
             HttpNotFoundException::class,
