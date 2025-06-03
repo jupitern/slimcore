@@ -130,4 +130,37 @@ class EloquentModel extends BaseEloquentModel
         return parent::save($options);
     }
 
+
+    private function autoFillColumnsSetValues()
+    {
+        $UserID = sessionUserId();
+
+        if (!$this->exists && in_array('DateCreated', $this->autoFillColumns) && $this->DateCreated == null) {
+            $this->setAttribute('DateCreated', date('Y-m-d H:i:s'));
+        }
+        if (!$this->exists && in_array('CreatedByUserID', $this->autoFillColumns) && $this->CreatedByUserID == null) {
+            $this->setAttribute('CreatedByUserID', $UserID);
+        }
+        if ($this->exists && in_array('DateUpdated', $this->autoFillColumns)) {
+            $this->setAttribute('DateUpdated', date('Y-m-d H:i:s'));
+        }
+        if ($this->exists && in_array('UpdatedByUserID', $this->autoFillColumns)) {
+            $this->setAttribute('UpdatedByUserID', $UserID);
+        }
+
+        if (!$this->exists && in_array('CreationDate', $this->autoFillColumns) && $this->CreationDate == null) {
+            $this->setAttribute('CreationDate', date('Y-m-d H:i:s'));
+        }
+        if (!$this->exists && in_array('CreatedBy', $this->autoFillColumns) && $this->CreatedBy == null) {
+            $this->setAttribute('CreatedBy', $UserID);
+        }
+
+        if (!$this->exists && in_array('created_at', $this->autoFillColumns) && $this->created_at == null) {
+            $this->setAttribute('created_at', date('Y-m-d H:i:s'));
+        }
+        if ($this->exists && in_array('updated_at', $this->autoFillColumns)) {
+            $this->setAttribute('updated_at', date('Y-m-d H:i:s'));
+        }
+    }
+
 }
