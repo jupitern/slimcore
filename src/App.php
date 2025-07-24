@@ -286,19 +286,20 @@ class App
     /**
      * Generate a Url
      */
-    public function url(string $url = '', ?bool $showIndex = null, bool $includeBaseUrl = true): string
+    public function url(string $url = '', ?bool $showIndex = null, bool $includeBaseUrl = true, ?string $baseUrl = null): string
     {
-        $baseUrl = $includeBaseUrl ? $this->getConfig('baseUrl') : '';
+        $domain = $baseUrl ?? (($_SERVER['HTTPS'] ?? 'off') != 'off' ? 'https' : 'http') .'://'.$_SERVER['SERVER_NAME'].'/';
+        $baseUrl = $includeBaseUrl ? $domain : '';
 
         $indexFile = '';
-        if ($showIndex || ($showIndex === null && (bool)$this->getConfig('indexFile'))) {
+        if ($showIndex || ($showIndex === null && (bool)$this->getConfig('indexFile', false))) {
             $indexFile = 'index.php/';
         }
         if (strlen($url) > 0 && $url[0] == '/') {
             $url = ltrim($url, '/');
         }
 
-        return $baseUrl . $indexFile . $url;
+        return ($includeBaseUrl ? $domain : '') . $indexFile . $url;
     }
 
     /**
