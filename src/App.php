@@ -288,15 +288,18 @@ class App
      */
     public function url(string $url = '', ?bool $showIndex = null, bool $includeBaseUrl = false): string
     {
-        $indexFile = '';
+        $baseUrl = $includeBaseUrl ? $this->getConfig('baseUrl', '/') : '/';
+        if (!str_ends_with($baseUrl, '/')) $baseUrl .= '/';
+
         if ($showIndex || ($showIndex === null && (bool)$this->getConfig('indexFile', false))) {
-            $indexFile = 'index.php/';
+            $baseUrl .= 'index.php/';
         }
-        if (strlen($url) > 0 && $url[0] == '/') {
+
+        if (str_starts_with($url, '/')) {
             $url = ltrim($url, '/');
         }
 
-        return ($includeBaseUrl ? $this->getConfig('baseUrl', '') : '') . $indexFile . $url;
+        return $baseUrl . $url;
     }
 
     /**
