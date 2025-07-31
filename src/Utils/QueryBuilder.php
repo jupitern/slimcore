@@ -9,7 +9,7 @@ use Illuminate\Database\Query\Processors\Processor;
 class QueryBuilder extends Builder
 {
 
-    public array $lazyLoads = [];
+    public array $relatedQueries = [];
 
     public function __construct(ConnectionInterface $connection = null, Grammar $grammar = null, Processor $processor = null)
     {
@@ -106,21 +106,21 @@ class QueryBuilder extends Builder
     }
 
 
-    public function lazyLoad(string $relationName, string $key, string $query): self
+    public function relatedDataQuery(string $relationName, string $key, string $query): self
     {
-        $this->lazyLoads[$relationName] = ['key' => $key, 'query' => $query];
+        $this->relatedQueries[$relationName] = ['key' => $key, 'query' => $query];
 
         return $this;
     }
 
 
-    public function execLazyLoads(array $data): array
+    public function fetchRelatedData(array $data): array
     {
-        if (empty($data) || empty($this->lazyLoads)) {
+        if (empty($data) || empty($this->relatedQueries)) {
             return $data;
         }
 
-        foreach ($this->lazyLoads as $relationName => $ll) {
+        foreach ($this->relatedQueries as $relationName => $ll) {
             $query = $ll['query'];
             preg_match_all('/\{\{(.*?)\}\}/s', $query, $matches);
 
@@ -160,7 +160,7 @@ class QueryBuilder extends Builder
 
         $data = $this->get()->toArray();
 
-        return $this->execLazyLoads($data);
+        return $this->fetchRelatedData($data);
     }
 
 
