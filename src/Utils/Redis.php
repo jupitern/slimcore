@@ -239,7 +239,7 @@ LUA;
 
     private function uncompress(mixed $value): mixed
     {
-        return unserialize((string)$value);
+        return is_string($value) ? unserialize((string)$value) : $value;
     }
 
 
