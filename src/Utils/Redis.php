@@ -64,7 +64,7 @@ class Redis
         return true; // FlushDB never fails.
     }
 
-    public function getMultiple(Traversable|array $keys, mixed $default = null, bool $uncompressData = true): array
+    public function getMultiple(iterable $keys, mixed $default = null, bool $uncompressData = true): array
     {
         if (!is_array($keys) && !$keys instanceof Traversable) {
             throw new \Exception("Keys must be an array or a \\Traversable instance.");
@@ -80,7 +80,7 @@ class Redis
         return $result;
     }
 
-    public function setMultiple(Traversable|array $values, $ttl = null, bool $compressData = true): bool
+    public function setMultiple(iterable $values, $ttl = null, bool $compressData = true): bool
     {
         if (!is_array($values) && !$values instanceof Traversable) {
             throw new \Exception("Values must be an array or a \\Traversable instance.");
@@ -104,7 +104,7 @@ class Redis
         return true;
     }
 
-    public function deleteMultiple(Traversable|array $keys): bool
+    public function deleteMultiple(iterable $keys): bool
     {
         if (!is_array($keys) && !$keys instanceof Traversable) {
             throw new \Exception("Keys must be an array or a \\Traversable instance.");
@@ -128,9 +128,6 @@ class Redis
 
     public function has(string $key): bool
     {
-        if (!is_string($key)) {
-            throw new \Exception("Provided key is not a legal string.");
-        }
         $this->redisReads++;
 
         return $this->client->exists($this->canonicalize($key)) === 1;
@@ -156,7 +153,7 @@ class Redis
         $var = $this->client->lpop($this->canonicalize($queue));
         $this->redisReads++;
 
-        return $uncompressData ? $this->uncompress($var[1]) : $var[1];
+        return $uncompressData ? $this->uncompress($var[1] ?? null) : $var[1] ?? null;
     }
 
     public function dequeueWait($queue, $timeout = 30, bool $uncompressData = true): mixed
@@ -168,7 +165,7 @@ class Redis
 
         } while ($var != null);
 
-        return $uncompressData ? $this->uncompress($var[1]) : $var[1];
+        return $uncompressData ? $this->uncompress($var[1] ?? null) : $var[1] ?? null;
     }
 
     /* PUB SUB */
@@ -240,7 +237,7 @@ LUA;
     }
 
 
-    private function uncompress($value): mixed
+    private function uncompress(mixed $value): mixed
     {
         return unserialize((string)$value);
     }
