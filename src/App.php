@@ -283,23 +283,20 @@ class App
         return $filename;
     }
 
-    /**
-     * Generate a Url
-     */
-    public function url(string $url = '', ?bool $showIndex = null, bool $includeBaseUrl = false): string
+    public function url(string $url = '', array $params = []): string
     {
-        $baseUrl = $includeBaseUrl ? $this->getConfig('baseUrl', '/') : '/';
-        if (!str_ends_with($baseUrl, '/')) $baseUrl .= '/';
-
-        if ($showIndex || ($showIndex === null && (bool)$this->getConfig('indexFile', false))) {
-            $baseUrl .= 'index.php/';
+        $baseUrl = '';
+        if (!str_starts_with(strtolower($url), 'http://') && !str_starts_with(strtolower($url), 'https://')) {
+            $baseUrl = $this->getConfig('baseUrl', '/');
         }
 
-        if (str_starts_with($url, '/')) {
+        $baseUrl .= $this->getConfig('indexFile', false) ? 'index.php/' : '';
+
+        if (str_ends_with($baseUrl, '/') && str_starts_with($url, '/')) {
             $url = ltrim($url, '/');
         }
 
-        return $baseUrl . $url;
+        return $baseUrl . $url . (!empty($params) ? '?'.http_build_query($params) : '');
     }
 
     /**
