@@ -11,16 +11,14 @@ class MongoDb implements ProviderInterface
     public static function register(App $app, $serviceName, array $settings = []): void
     {
         $conn = new Client($settings["uri"], $settings["options"]);
+        $db = $conn->selectDatabase($settings['db']);
 
-        /** @var \MongoDB\Database $conn */
-        $conn = $conn->selectDatabase($settings['db']);
-
-        if ((bool)$settings["setGlobal"]) {
+        if ((bool)$settings["setGlobal"] && class_exists('SequelMongo\QueryBuilder')) {
             // Set a global connection to be used on all new QueryBuilders
-            QueryBuilder::setGlobalConnection($conn);
+            QueryBuilder::setGlobalConnection($db);
         }
 
-        $app->registerInContainer($serviceName, $conn);
+        $app->registerInContainer($serviceName, $db);
     }
 
 }

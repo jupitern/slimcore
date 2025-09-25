@@ -145,8 +145,9 @@ class QueryBuilder extends Builder
 
     public function datatablesGetData(array $params): array
     {
-        $this->offset($params['start'])
-            ->limit($params['length']);
+        if ($params['length'] > 0) {
+            $this->offset($params['start'])->limit($params['length']);
+        }
 
         foreach ($params['order'] ?? [] as $order) {
 
