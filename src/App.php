@@ -107,7 +107,12 @@ class App
         $this->registerMiddleware();
         $this->slim->addRoutingMiddleware();
         $this->slim->add(new MethodOverrideMiddleware());
-        $this->slim->add(new TrailingSlash());
+
+        if (!$this->isConsole() && !empty($this->configs['basePath'] ?? '')) {
+            $this->slim->setBasePath(rtrim($this->configs['basePath'], '/'));
+        } else {
+            $this->slim->add(new TrailingSlash());
+        }
 
         $this->registerErrorHandlers();
 
