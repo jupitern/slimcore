@@ -1,7 +1,9 @@
 <?php
 
 namespace SlimCore\App\Console;
-use Psr\Log\LogLevel;
+use Exception;
+use \Psr\Log\LogLevel;
+
 
 class Command
 {
@@ -31,7 +33,17 @@ class Command
         $this->output($string);
 
         if (!empty($this->logFilePath)) {
-            file_put_contents($this->logFilePath, $string.PHP_EOL, FILE_APPEND);
+            try {
+                if (@file_put_contents($this->logFilePath, $string . PHP_EOL, FILE_APPEND | LOCK_EX) === false) {
+                    throw new Exception("Resource temporarily unavailable - File lock with path ".$this->logFilePath);
+                }
+            } catch (Exception $e) {
+                sleep(1);
+
+                if (@file_put_contents($this->logFilePath, $string . PHP_EOL, FILE_APPEND | LOCK_EX) === false) {
+                    addLog(LogLevel::ERROR, $e->getMessage(), $context);
+                }
+            }
         }
 
         if ($addLog && function_exists('addLog')) {
