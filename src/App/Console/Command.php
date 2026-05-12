@@ -41,7 +41,9 @@ class Command
                 sleep(1);
 
                 if (@file_put_contents($this->logFilePath, $string . PHP_EOL, FILE_APPEND | LOCK_EX) === false) {
-                    addLog(LogLevel::ERROR, $e->getMessage(), $context);
+                    if ($addLog && function_exists('addLog')) {    
+                        addLog(LogLevel::INFO, $e->getMessage(), $context);
+                    }
                 }
             }
         }
