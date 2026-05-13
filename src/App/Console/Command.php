@@ -38,7 +38,7 @@ class Command
                     throw new Exception("Resource temporarily unavailable - File lock with path ".$this->logFilePath);
                 }
             } catch (Exception $e) {
-                sleep(1);
+                usleep(100000); // Wait for 100ms before retrying
 
                 if (@file_put_contents($this->logFilePath, $string . PHP_EOL, FILE_APPEND | LOCK_EX) === false) {
                     if ($addLog && function_exists('addLog')) {    
