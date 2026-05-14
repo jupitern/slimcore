@@ -11,7 +11,7 @@ class QueryBuilder extends Builder
 
     public array $relatedQueries = [];
 
-    public function __construct(ConnectionInterface $connection = null, Grammar $grammar = null, Processor $processor = null)
+    public function __construct(?ConnectionInterface $connection = null, ?Grammar $grammar = null, ?Processor $processor = null)
     {
         /** ConnectionInterface $connection */
         if ($connection == null) $connection = app()->resolve('db');
@@ -40,7 +40,7 @@ class QueryBuilder extends Builder
     }
 
 
-    public function compareInt($column, $value, string $conditionType = 'and'): self
+    public function compareInt(mixed $column, $value, string $conditionType = 'and'): self
     {
         $operator = $this->extractOperator($value);
         $value = $this->formatNumerics($value);
@@ -53,7 +53,7 @@ class QueryBuilder extends Builder
     }
 
 
-    public function compareNumeric($column, $value, string $conditionType = 'and'): self
+    public function compareNumeric(mixed $column, $value, string $conditionType = 'and'): self
     {
         $operator = $this->extractOperator($value);
         $value = $this->formatNumerics($value);
@@ -66,7 +66,7 @@ class QueryBuilder extends Builder
     }
 
 
-    public function compareDate($column, $startDate = null, $endDate = null, string $conditionType = 'and', int $minYear = 1900): self
+    public function compareDate(mixed $column, ?string $startDate = null, ?string $endDate = null, string $conditionType = 'and', int $minYear = 1900): self
     {
         if (isset($startDate) && strlen($startDate) > 0) {
 
@@ -96,7 +96,7 @@ class QueryBuilder extends Builder
     }
 
 
-    public function addConditionIfValue($condition, $value = null, array $params = [], string $conditionType = 'and'): self
+    public function addConditionIfValue(mixed $condition, mixed $value = null, array $params = [], string $conditionType = 'and'): self
     {
         if (isset($value) && !empty($value)) {
             $this->whereRaw($condition, $params, strtolower($conditionType));

@@ -35,7 +35,7 @@ class App
 
     private static ?self $instance = null;
 
-    final function __construct(ContainerInterface $container = null)
+    final function __construct(?ContainerInterface $container = null)
     {
         // error handler to catch warnings and notices
         set_error_handler(function ($severity, $message, $file, $line) {
@@ -181,7 +181,7 @@ class App
     /**
      * Application Singleton Factory
      */
-    final public static function instance(ContainerInterface $container = null): self
+    final public static function instance(?ContainerInterface $container = null): self
     {
         if (null === static::$instance) {
             static::$instance = new static($container);
@@ -212,7 +212,7 @@ class App
         }
     }
 
-    public function __get($name)
+    public function __get(string $name)
     {
         if (property_exists($this, $name)) {
             return $this->slim->{$name};
@@ -235,7 +235,7 @@ class App
         throw new \Exception('Method not found :: ' . $fn);
     }
 
-    public function has($name): bool
+    public function has(string $name): bool
     {
         return $this->getContainer()->has($name);
     }
@@ -245,18 +245,18 @@ class App
         return $this->slim->getContainer();
     }
 
-    public function registerInContainer(string $name, $value): void
+    public function registerInContainer(string $name, mixed $value): void
     {
         ($this->getContainer())->set($name, $value);
     }
 
-    public function setConfig($param, $value): void
+    public function setConfig(string $param, mixed $value): void
     {
         $dn = new DotNotation($this->configs);
         $dn->set($param, $value);
     }
 
-    public function getConfig($param, $defaultValue = null)
+    public function getConfig(string $param, mixed $defaultValue = null): mixed
     {
         $dn = new DotNotation($this->configs);
         return $dn->get($param, $defaultValue);
@@ -272,7 +272,7 @@ class App
         return strtolower($this->env) === strtolower($environment);
     }
 
-    public function determineEnvFilename($filename = null) : string
+    public function determineEnvFilename(?string $filename = null) : string
     {
         if ($this->isConsole()) {
             $cliCommandParts = (array)$GLOBALS['argv'];
@@ -375,7 +375,7 @@ class App
     /**
      * @throws \ReflectionException|\Exception
      */
-    public function error(int $status = 500, string $error = '', array $messages = [], $code = null): Response
+    public function error(int $status = 500, string $error = '', array $messages = [], ?int $code = null): Response
     {
         $response = $this->resolve(Response::class);
 

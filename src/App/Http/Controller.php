@@ -40,14 +40,14 @@ class Controller
         return $this->request->getQueryParams();
     }
 
-    public function getQueryParam($paramName, $defaultValue = null)
+    public function getQueryParam(string $paramName, mixed $defaultValue = null)
     {
         $params = $this->request->getQueryParams();
 
         return $params[$paramName] ?? $defaultValue;
     }
 
-    public function getPostParam($paramName, $defaultValue = null): mixed
+    public function getPostParam(string $paramName, mixed $defaultValue = null): mixed
     {
         return $this->postParams->get($paramName, $defaultValue);
     }
@@ -57,12 +57,12 @@ class Controller
         return $this->postParams->getValues();
     }
 
-    public function setFlashMessage($key, $value): void
+    public function setFlashMessage(string $key, mixed $value): void
     {
         Session::set("flash-message-$key", json_encode($value));
     }
 
-    public function getFlashMessage($key, $defaultValue): mixed
+    public function getFlashMessage(string $key, mixed $defaultValue): mixed
     {
         $val = Session::get("flash-message-$key");
         Session::delete("flash-message-$key");

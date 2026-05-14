@@ -80,7 +80,7 @@ class Redis
         return $result;
     }
 
-    public function setMultiple(iterable $values, $ttl = null, bool $compressData = true): bool
+    public function setMultiple(iterable $values, ?int $ttl = null, bool $compressData = true): bool
     {
         if (!is_array($values) && !$values instanceof Traversable) {
             throw new \Exception("Values must be an array or a \\Traversable instance.");

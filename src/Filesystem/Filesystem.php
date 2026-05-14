@@ -8,10 +8,7 @@ class Filesystem extends \League\Flysystem\Filesystem
 {
     protected $adapter;
     
-    public function __construct(
-        FilesystemAdapter $adapter,
-        array $config = [],
-        PathNormalizer $pathNormalizer = null
+    public function __construct(FilesystemAdapter $adapter, array $config = [], ?PathNormalizer $pathNormalizer = null
     ){
         parent::__construct($adapter, $config, $pathNormalizer);
         
@@ -20,7 +17,6 @@ class Filesystem extends \League\Flysystem\Filesystem
     
     public function bulkDelete(array $files): bool
     {
-        
         if(!method_exists($this->adapter, 'bulkDelete')){
             throw new \Exception('Adapter does not implement bulk delete');
         }
