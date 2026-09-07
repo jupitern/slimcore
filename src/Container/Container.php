@@ -17,7 +17,7 @@ class Container implements ContainerInterface
      *
      * @return self
      */
-    public function withAutoWiring(): static
+    public function withAutoWiring(): self
     {
         $this->autoWiring = true;
 
@@ -32,7 +32,7 @@ class Container implements ContainerInterface
      *
      * @return self
      */
-    public function set(string $id, mixed $value): static
+    public function set(string $id, mixed $value): self
     {
         $this->container[$id] = $value;
 

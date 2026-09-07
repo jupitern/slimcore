@@ -5,14 +5,14 @@ use SlimCore\App;
 
 class CommandRouter
 {
-    private $app;
+    private App $app;
 
-    public function __construct($app)
+    public function __construct(App $app)
     {
         $this->app = $app;
     }
 
-    public function execute($argv, ?array $environments = null): mixed
+    public function execute(array $argv, ?array $environments = null): mixed
     {
         ob_start();
         set_time_limit(0);
@@ -81,7 +81,7 @@ class CommandRouter
     }
 
 
-    private function tryResolveRoute($namespace, $class, $method, $params): mixed
+    private function tryResolveRoute(string $namespace, string $class, string $method, array $params): mixed
     {
         try {
             return $this->app->resolveRoute([$namespace.'\\'.$class, $method], $params);

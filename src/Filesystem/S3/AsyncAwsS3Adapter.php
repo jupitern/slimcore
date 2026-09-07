@@ -53,8 +53,8 @@ class AsyncAwsS3Adapter extends \League\Flysystem\AsyncAwsS3\AsyncAwsS3Adapter
         S3Client $client,
         string $bucket,
         string $prefix = '',
-        VisibilityConverter $visibility = null,
-        MimeTypeDetector $mimeTypeDetector = null
+        ?VisibilityConverter $visibility = null,
+        ?MimeTypeDetector $mimeTypeDetector = null
     ) {
         parent::__construct($client, $bucket, $prefix, $visibility, $mimeTypeDetector);
 
