@@ -26,7 +26,7 @@ class IlluminateDatabase implements ProviderInterface
         }
 
         foreach ($settings['inisql'] ?? [] as $sql) {
-            $db->statement($sql);
+            $db->getPdo()->exec($sql);
         }
 
         $app->registerInContainer($serviceName, $db);
