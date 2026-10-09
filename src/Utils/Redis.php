@@ -50,6 +50,16 @@ class Redis
         throw new \Exception("TTL must be an integer or an instance of \\DateInterval");
     }
 
+    public function getOrSet(string $key, mixed $value, ?int $ttl = null, bool $compressData = true): mixed
+    {
+        if ($this->has($key)) return $this->get($key);
+
+        if ($value instanceof \Closure) $value = $value();
+        echo $this->set($key, $value, $ttl, $compressData).PHP_EOL;
+
+        return $value;
+    }
+
     public function delete(string $key): bool
     {
         $this->redisWrites++;
