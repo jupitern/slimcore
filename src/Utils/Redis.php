@@ -55,7 +55,6 @@ class Redis
         if ($this->has($key)) return $this->get($key);
 
         if ($value instanceof \Closure) $value = $value();
-        echo $this->set($key, $value, $ttl, $compressData).PHP_EOL;
 
         return $value;
     }
