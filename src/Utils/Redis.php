@@ -56,7 +56,7 @@ class Redis
 
         if ($value instanceof \Closure) $value = $value();
 
-        $this->set($key, $vaue, $ttl, $compressData);
+        $this->set($key, $value, $ttl, $compressData);
 
         return $value;
     }
