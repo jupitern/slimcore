@@ -201,8 +201,9 @@ class QueryBuilder extends Builder
             $qb->orderByRaw($conditions['order']);
         }
 
+        $res = [];
         if (empty($groupResults)) {
-            $res = $qb->pluck($columns[1] ?? $columns[0], $columns[0])->toArray();
+            $res = $qb->pluck($columns[1] ?? $columns[0], $columns[0] ?? '')->toArray();
             if (isset($conditions['empty']) && $conditions['empty']) {
                 $res = ['' => ''] + $res;
             }
@@ -214,7 +215,7 @@ class QueryBuilder extends Builder
             $fieldNameValue = explode('.', $columns[1] ?? $columns[0]);
             if (is_string($groupResults)) {
                 foreach ($rows as $row) {
-                    if (!isset($res[$row->{$groupResults}])) {
+                    if ($row->{$groupResults} && !array_key_exists($row->{$groupResults}, $res)) {
                         $res[$row->{$groupResults}] = [];
                     }
                     $res[$row->{$groupResults} ?? ''][$row->{($fieldNameID[1] ?? $fieldNameID[0])}] = $row->{($fieldNameValue[1] ?? $fieldNameValue[0])};
